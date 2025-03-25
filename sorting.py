@@ -158,8 +158,8 @@ class SortingVisualizer:
         def _merge_sort(subarr):
             if len(subarr) > 1:
                 mid = len(subarr) // 2
-                left_half = subarr[:mid]
-                right_half = subarr[mid:]
+                left_half = subarr[:mid].copy()
+                right_half = subarr[mid:].copy()
 
                 _merge_sort(left_half)
                 _merge_sort(right_half)
@@ -192,6 +192,35 @@ class SortingVisualizer:
 
         return _merge_sort(arr)
 
+    def insertion_sort(self, arr, update_plot=None):
+        """
+        Insertion Sort implementation with optional visualization
+
+        :param arr: Array to be sorted
+        :param update_plot: Callback for visualization
+        :return: Sorted array
+        """
+        # Traverse through 1 to len(arr)
+        for i in range(1, len(arr)):
+            key = arr[i]
+            j = i - 1
+
+            # Move elements of arr[0..i-1], that are greater than key,
+            # to one position ahead of their current position
+            while j >= 0 and arr[j] > key:
+                if update_plot:
+                    update_plot(arr, compare_indices=[j, j + 1])
+                arr[j + 1] = arr[j]
+                j -= 1
+
+            arr[j + 1] = key
+
+            # Optionally update the plot after inserting the key
+            if update_plot:
+                update_plot(arr, compare_indices=[j + 1])
+
+        return arr
+
 
 def main():
     # Create visualizer
@@ -203,6 +232,7 @@ def main():
         (visualizer.bubble_sort, "Bubble Sort"),
         (visualizer.quick_sort, "Quick Sort"),
         (visualizer.merge_sort, "Merge Sort"),
+        (visualizer.insertion_sort, "Insertion Sort"),
     ]
 
     # Visualize sorting for different array types
